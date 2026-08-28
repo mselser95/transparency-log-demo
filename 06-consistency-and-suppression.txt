@@ -1,0 +1,44 @@
+=== consistency: the log's history between two moments in this run
+
+checkpoint at size 4, captured when the artifact was integrated:
+9f77272444dc - 7027229348690381584
+4
+NIaOWvx3k6mctUwqn4+0rur42L/Lns//V9T2czi7p2Y=
+
+— 9f77272444dc I3NMmDBEAiBtjZag0ltedfMpig3C8UDbkurEKb+sLSP98grtuEZSJAIgTHOZR55yzMUzXL4MskC5yJdaZJmN1FRQYdr4cJH0CeE=
+
+checkpoint at size 8, captured after 4 more releases:
+9f77272444dc - 7027229348690381584
+8
+ofx23sR79txYBTNM+RKD/IEG7l6RIFx5taYr2E0eS5s=
+
+— 9f77272444dc I3NMmDBGAiEAgvkzLAKWd4vHSDFzTbj33LUNRcwnBTMPxQ2xyVR9IGMCIQCMoHvTf0XP/lrCpM+cw8d6iW5ZpGEhorng1ktuCAA+aA==
+
+proof nodes: ["e1ff2ffa2d5dfed12330ccfbfd78bcd17637ec244ced130078ea4f95fe00276a"]
+
+   [ 1] earlier-checkpoint     PASS  signed by the log, size 4, root 34868e5afc7793a99cb54c2a...
+   [ 2] later-checkpoint       PASS  signed by the log, size 8, root a1fc76dec47bf6dc5805334c...
+   [ 3] append-only            PASS  1 node(s) prove size 4 is a prefix of size 8
+
+   earlier size 4    root (signed): 34868e5afc7793a99cb54c2a9f8fb4aeeaf8d8bfcb9ecfff57d4f67338bba766
+   later   size 8    root (signed): a1fc76dec47bf6dc5805334cf91283fc8106ee5e91205c79b5a62bd84d1e4b9b
+   consistency proof nodes       : 1
+
+   VERDICT CONSISTENCY: VERIFIED  (3 checks, 0 failed)
+exit 0
+
+--- the same check, one hex digit of one proof node changed:
+   [ 1] earlier-checkpoint     PASS  signed by the log, size 4, root 34868e5afc7793a99cb54c2a...
+   [ 2] later-checkpoint       PASS  signed by the log, size 8, root a1fc76dec47bf6dc5805334c...
+   [ 3] append-only            FAIL  the proof reconstructs e6df59bf3460c0406568842cd942b82c3b12d2b455b3be5b1be050d970eb33a3 as the root at size 8, but the log signed a1fc76dec47bf6dc5805334cf91283fc8106ee5e91205c79b5a62bd84d1e4b9b
+
+   earlier size 4    root (signed): 34868e5afc7793a99cb54c2a9f8fb4aeeaf8d8bfcb9ecfff57d4f67338bba766
+   later   size 8    root (signed): a1fc76dec47bf6dc5805334cf91283fc8106ee5e91205c79b5a62bd84d1e4b9b
+   consistency proof nodes       : 1
+
+   VERDICT CONSISTENCY: REFUSED   (3 checks, 1 failed: append-only)
+exit 1
+
+--- suppression:
+index search for the artifact's hash            : 1 entry/entries
+index search for an artifact nobody ever signed : 0 entries

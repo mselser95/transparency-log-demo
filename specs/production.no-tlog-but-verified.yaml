@@ -1,0 +1,8 @@
+# Offline, anchored, verified -- and never logged. Fails exactly one predicate.
+component: txl-payments-service
+tier: 0
+dimension: 9
+supply_chain:
+  artifact_provenance: required
+  workflow: workflows/release-no-tlog-but-verified.yml
+  evidence: ../04-inclusion-proof-verified.txt

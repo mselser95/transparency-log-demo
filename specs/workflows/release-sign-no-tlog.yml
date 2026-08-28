@@ -1,0 +1,25 @@
+# FIXTURE -- signs, and switches the transparency log OFF.
+#
+# This is not a strawman. It is the configuration of this repository's own
+# sibling demo (image-signing-demo), chosen there deliberately because the
+# admission controller in that demo verifies against a key and needs no log.
+# It is also what a team reaches for the first time a CI run fails because the
+# public log was slow.
+#
+# The upstream `artifact-provenance` probe row PASSES this file.
+name: release
+on:
+  push:
+    tags: ['v*']
+jobs:
+  sign:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: make dist/txl-payments-service.tar.gz
+      - name: sign
+        run: |
+          cosign sign-blob --yes --key "$COSIGN_KEY" \
+            --tlog-upload=false \
+            --output-signature dist/artifact.sig \
+            dist/txl-payments-service.tar.gz

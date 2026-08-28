@@ -1,0 +1,71 @@
+=== signing-only -- P2+P3+P4 -- the upstream row, reproduced: a keyword match for 'cosign' cannot see that the transparency log was switched off
+    fixture: specs/production.no-tlog.yaml
+    full row              : exit 1
+    TXL_ROW_MODE=signing-only : exit 0
+      spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.no-tlog.yaml
+      component         : txl-payments-service   tier 0   dimension 9
+      row mode          : signing-only
+      P0 citations      : PASS workflows/release-sign-no-tlog.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+      P1 signing        : PASS 1 executable line(s) match a signing/attestation mechanism: [cosign sign-blob --yes --key "$COSIGN_KEY" --tlog-upload=fal]
+      VERDICT PASS
+    => the predicate is LOAD-BEARING: removing it flips FAIL to PASS on the same file.
+
+=== signing-only -- P2+P3+P4, on a workflow with NO SIGNING STEP AT ALL -- a PROMOTED finding: the upstream pattern's 'attestations:' alternative matches the 'attestations: write' entry of a GitHub permissions block
+    fixture: specs/production.permissions-only.yaml
+    full row              : exit 1
+    TXL_ROW_MODE=signing-only : exit 0
+      spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.permissions-only.yaml
+      component         : txl-payments-service   tier 0   dimension 9
+      row mode          : signing-only
+      P0 citations      : PASS workflows/release-permissions-only.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+      P1 signing        : PASS 1 executable line(s) match a signing/attestation mechanism: [attestations: write]
+      VERDICT PASS
+    => the predicate is LOAD-BEARING: removing it flips FAIL to PASS on the same file.
+
+=== no-tlog-check -- P2 -- the difference between a signature and a timestamped, witnessed signature
+    fixture: specs/production.no-tlog-but-verified.yaml
+    full row              : exit 1
+    TXL_ROW_MODE=no-tlog-check : exit 0
+      spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.no-tlog-but-verified.yaml
+      component         : txl-payments-service   tier 0   dimension 9
+      row mode          : no-tlog-check
+      P0 citations      : PASS workflows/release-no-tlog-but-verified.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+      P1 signing        : PASS 3 executable line(s) match a signing/attestation mechanism: [attestations: write; run: slsa-github-generator generate --artifact dist/txl-paym; cosign sign-blob --yes --key "$COSIGN_KEY" --tlog-upload=fal]
+      P3 verify         : PASS 1 verification step(s): slsa-verifier verify-artifact             --provenance-path dist/prove
+      P4 offline anchor : PASS 1 verification step(s) settle against material on disk: slsa-verifier verify-artifact             --provenance-path 
+      P5 evidence       : PASS log index, integrated time, 2 recomputed/signed root(s), 10 checks with 0 failed
+      VERDICT PASS
+    => the predicate is LOAD-BEARING: removing it flips FAIL to PASS on the same file.
+
+=== no-anchor-check -- P4 -- the difference between verifying a proof and asking the log whether it is honest
+    fixture: specs/production.online-verify.yaml
+    full row              : exit 1
+    TXL_ROW_MODE=no-anchor-check : exit 0
+      spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.online-verify.yaml
+      component         : txl-payments-service   tier 0   dimension 9
+      row mode          : no-anchor-check
+      P0 citations      : PASS workflows/release-verify-online.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+      P1 signing        : PASS 2 executable line(s) match a signing/attestation mechanism: [cosign sign-blob --yes --key "$COSIGN_KEY" --rekor-url "$REK; cosign verify-blob --key "$COSIGN_PUB" --rekor-url "$REKOR_U]
+      P2 log upload     : PASS no executable line disables transparency-log upload
+      P3 verify         : PASS 1 verification step(s): cosign verify-blob --key "$COSIGN_PUB"             --rekor-url "$REKOR
+      P5 evidence       : PASS log index, integrated time, 2 recomputed/signed root(s), 10 checks with 0 failed
+      VERDICT PASS
+    => the predicate is LOAD-BEARING: removing it flips FAIL to PASS on the same file.
+
+=== no-evidence-check -- P5 -- the difference between evidence that records a measurement and evidence that uses the word 'verified'
+    fixture: specs/production.evidence-empty.yaml
+    full row              : exit 1
+    TXL_ROW_MODE=no-evidence-check : exit 0
+      spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.evidence-empty.yaml
+      component         : txl-payments-service   tier 0   dimension 9
+      row mode          : no-evidence-check
+      P0 citations      : PASS workflows/release-signed-logged-verified.yml -> ok, evidence/prose-evidence.txt -> ok
+      P1 signing        : PASS 1 executable line(s) match a signing/attestation mechanism: [cosign sign-blob --yes --key "$COSIGN_KEY" --rekor-url "$REK]
+      P2 log upload     : PASS no executable line disables transparency-log upload
+      P3 verify         : PASS 1 verification step(s): ./bin/txl-verify inclusion             --entry dist/entry.json        
+      P4 offline anchor : PASS 1 verification step(s) settle against material on disk: ./bin/txl-verify inclusion             --entry dist/entry.js
+      VERDICT PASS
+    => the predicate is LOAD-BEARING: removing it flips FAIL to PASS on the same file.
+
+mutations: 5   without a flip: 0
+NON-VACUITY OK

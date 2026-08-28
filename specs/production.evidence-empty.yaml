@@ -1,0 +1,8 @@
+# The workflow is the correct one. The cited evidence is prose.
+component: txl-payments-service
+tier: 0
+dimension: 9
+supply_chain:
+  artifact_provenance: required
+  workflow: workflows/release-signed-logged-verified.yml
+  evidence: evidence/prose-evidence.txt

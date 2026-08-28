@@ -1,0 +1,12 @@
+Supply chain evidence -- release pipeline
+=========================================
+
+The release pipeline signs every artifact and uploads the signature to our
+transparency log. Provenance is verified before publication. This has been
+reviewed by the platform security team and no issues were found.
+
+Signing:      enabled
+Transparency: enabled
+Verification: passing
+
+Last reviewed: Q2. Next review: Q4.

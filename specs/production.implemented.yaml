@@ -1,0 +1,11 @@
+# The shape this row is written to PASS. Cited files are real: the workflow is
+# a fixture, the evidence is the file run-demo.sh writes at step 10 of the
+# validated run, so this fixture cannot pass on a machine where the demo has
+# not actually verified an inclusion proof.
+component: txl-payments-service
+tier: 0
+dimension: 9
+supply_chain:
+  artifact_provenance: required
+  workflow: workflows/release-signed-logged-verified.yml
+  evidence: ../04-inclusion-proof-verified.txt

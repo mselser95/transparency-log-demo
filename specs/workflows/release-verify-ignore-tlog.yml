@@ -1,0 +1,28 @@
+# FIXTURE -- signs, logs, verifies, and tells the verifier to ignore the log.
+#
+# The flag is usually added to unblock a release at 6pm on a Friday, and it is
+# never removed, because nothing goes red when it stays. The workflow still
+# contains the words "sign", "rekor" and "verify", and the upstream row still
+# passes it.
+name: release
+on:
+  push:
+    tags: ['v*']
+jobs:
+  sign:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: make dist/txl-payments-service.tar.gz
+      - name: sign
+        run: |
+          cosign sign-blob --yes --key "$COSIGN_KEY" \
+            --rekor-url "$REKOR_URL" \
+            --bundle dist/artifact.bundle.json \
+            dist/txl-payments-service.tar.gz
+      - name: verify
+        run: |
+          cosign verify-blob --key "$COSIGN_PUB" \
+            --insecure-ignore-tlog=true \
+            --bundle dist/artifact.bundle.json \
+            dist/txl-payments-service.tar.gz

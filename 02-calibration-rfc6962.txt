@@ -1,0 +1,17 @@
+=== CALIBRATION: verifier/merkle.go against a second implementation of RFC 6962
+
+=== RUN   TestInclusionAgainstRFC6962Reference
+    merkle_test.go:163: CALIBRATION inclusion: sizes 1..16, valid (leaf,size) pairs verified: 136, mutants rejected: 604, mutants accepted: 0
+--- PASS: TestInclusionAgainstRFC6962Reference (0.00s)
+=== RUN   TestConsistencyAgainstRFC6962Reference
+    merkle_test.go:208: CALIBRATION consistency: sizes 1..16, valid (first,second) pairs verified: 136, mutants rejected: 555, mutants accepted: 0
+--- PASS: TestConsistencyAgainstRFC6962Reference (0.00s)
+=== RUN   TestDomainSeparation
+    merkle_test.go:234: CALIBRATION domain separation: 3 distinctions asserted, 0 collisions
+--- PASS: TestDomainSeparation (0.00s)
+=== RUN   TestEmptyTreeRejectsInclusion
+    merkle_test.go:249: CALIBRATION empty tree: inclusion refused, MTH({}) = e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+--- PASS: TestEmptyTreeRejectsInclusion (0.00s)
+PASS
+ok  	txl/verifier	(cached)
+?   	txl/verifier/stub	[no test files]

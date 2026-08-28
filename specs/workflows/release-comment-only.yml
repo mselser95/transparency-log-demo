@@ -1,0 +1,22 @@
+# FIXTURE -- the word, and nothing else.
+#
+# There is no signing step in this file. The string `cosign` appears exactly
+# once, in this comment, saying that cosign is on the roadmap for Q3. A row
+# that greps a workflow directory WITHOUT stripping comments passes this file
+# and reports "signing/attestation step present"; the upstream probe row has
+# already been fixed for exactly that false PASS once, which is why its own
+# code strips comments before matching.
+name: release
+on:
+  push:
+    tags: ['v*']
+env:
+  RELEASE_CHANNEL: stable
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: make dist/txl-payments-service.tar.gz
+      - name: publish
+        run: gh release upload "$GITHUB_REF_NAME" dist/txl-payments-service.tar.gz

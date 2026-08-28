@@ -1,0 +1,8 @@
+# The word `cosign` in a comment, and no signing step anywhere.
+component: txl-payments-service
+tier: 0
+dimension: 9
+supply_chain:
+  artifact_provenance: required
+  workflow: workflows/release-comment-only.yml
+  evidence: ../04-inclusion-proof-verified.txt

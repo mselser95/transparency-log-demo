@@ -1,0 +1,44 @@
+# FIXTURE -- offline, anchored, verified, and untimestamped.
+#
+# The most defensible of the failing fixtures, and the reason P2 exists as a
+# predicate of its own. This pipeline signs the artifact, generates build
+# provenance, keeps that provenance in a file, and verifies it OFFLINE against
+# that file before publishing. Nothing about it is lazy, and it fails no
+# predicate except one.
+#
+# It never writes to a transparency log. So what the chain proves is custody of
+# a key and the shape of a build -- and a key stolen last March signs today's
+# artifact exactly as convincingly as it signed March's, with nothing anywhere
+# recording which came first, and nothing anywhere that a third party could
+# examine to notice that a signature exists which the key's owner never made.
+#
+# It fails only P2, which is what makes it the fixture the `no-tlog-check`
+# mutation flips.
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+jobs:
+  sign:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: make dist/txl-payments-service.tar.gz
+      - name: generate build provenance
+        run: slsa-github-generator generate --artifact dist/txl-payments-service.tar.gz --output dist/provenance.intoto.jsonl
+      - name: sign, without a transparency log
+        run: |
+          cosign sign-blob --yes --key "$COSIGN_KEY" \
+            --tlog-upload=false \
+            --output-signature dist/artifact.sig \
+            dist/txl-payments-service.tar.gz
+      - name: verify the provenance offline, from the file on disk
+        run: |
+          slsa-verifier verify-artifact \
+            --provenance-path dist/provenance.intoto.jsonl \
+            --source-uri github.com/example-org/txl-payments-service \
+            dist/txl-payments-service.tar.gz

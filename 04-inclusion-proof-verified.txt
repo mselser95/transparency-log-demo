@@ -1,0 +1,26 @@
+=== the artifact's inclusion proof, verified OFFLINE
+artifact : work/dist/txl-payments-service-1.4.2.tar.gz
+sha256   : 341b3b01c30c1137f46af3549bad6c0074633e61789f174602f45068606d50ec
+
+   [ 1] log-entry-present      PASS  1 entry, uuid 6185bbdc5be3cb10ad64e7c563d28901aeab0708f6b850d4bbb05e95d1b72d922eb6f42c4d6e12ff
+   [ 2] artifact-binding       PASS  entry names sha256:341b3b01c30c1137... = the artifact on disk
+   [ 3] entry-signature        PASS  verifies over the artifact, signer key sha256:573e367e
+   [ 4] expected-signer        PASS  the entry's signer key is the expected one
+   [ 5] leaf-hash              PASS  SHA-256(0x00||body) = ad64e7c563d28901aeab0708... = the uuid suffix
+   [ 6] merkle-path            PASS  3 sibling hash(es), index 3 of tree size 8 -> root a1fc76dec47bf6dc5805334c...
+   [ 7] root-anchor            PASS  recomputed root == the root the log SIGNED, at tree size 8
+   [ 8] checkpoint-signature   PASS  note signed by the log, origin 9f77272444dc - 7027229348690381584
+   [ 9] log-identity           PASS  key hint 23734c98 = SHA-256(log key)[:4] = logID prefix
+   [10] signed-entry-timestamp PASS  the log signed integratedTime=1787929748 (2026-08-28T15:09:08Z)
+
+   log index          : 3
+   integrated time    : 1787929748  (2026-08-28T15:09:08Z)
+   tree size at proof : 8
+   audit path length  : 3
+   recomputed root    : a1fc76dec47bf6dc5805334cf91283fc8106ee5e91205c79b5a62bd84d1e4b9b
+   root the log SIGNED: a1fc76dec47bf6dc5805334cf91283fc8106ee5e91205c79b5a62bd84d1e4b9b
+   checkpoint origin  : 9f77272444dc - 7027229348690381584
+   rootHash in response: a1fc76dec47bf6dc5805334cf91283fc8106ee5e91205c79b5a62bd84d1e4b9b
+
+   VERDICT INCLUSION: VERIFIED  (10 checks, 0 failed)
+exit 0

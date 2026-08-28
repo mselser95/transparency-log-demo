@@ -1,0 +1,24 @@
+# FIXTURE -- signs and logs, and never verifies anything.
+#
+# The pipeline PRODUCES provenance and CONSUMES none of it. Everything about
+# this workflow is correct; there is simply nobody downstream who would notice
+# if it stopped working, which makes it a generator of artifacts rather than a
+# gate.
+name: release
+on:
+  push:
+    tags: ['v*']
+jobs:
+  sign:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: make dist/txl-payments-service.tar.gz
+      - name: sign and upload to the log
+        run: |
+          cosign sign-blob --yes --key "$COSIGN_KEY" \
+            --rekor-url "$REKOR_URL" \
+            --bundle dist/artifact.bundle.json \
+            dist/txl-payments-service.tar.gz
+      - name: publish
+        run: gh release upload "$GITHUB_REF_NAME" dist/txl-payments-service.tar.gz

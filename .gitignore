@@ -1,0 +1,5 @@
+# Scratch: the log's data, the artifact, the keys, the entries, the checkpoints.
+# Regenerated on every run and deleted by teardown.sh.
+work/
+# Downloaded, checksum-verified tools and the built verifier binaries.
+bin/

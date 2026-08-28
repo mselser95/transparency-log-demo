@@ -1,0 +1,12 @@
+=== CONTROL never-uploaded
+artifact sha256      : e7ce99475b3e30a07537f778de17756f923ffa8835604efc8f345a59203feff6
+
+--- cosign verify-blob (signature only), exit 0:
+WARNING: Skipping tlog verification is an insecure practice that lacks transparency and auditability verification for the blob.
+Verified OK
+
+--- the log's index search for that hash: 0 entries
+
+--- offline transparency-log verification, exit 1:
+   [ 1] log-entry-present      FAIL  the log holds 0 entries for this artifact; a signature alone carries no timestamp and no witness
+   VERDICT INCLUSION: REFUSED   (1 checks, 1 failed: log-entry-present)

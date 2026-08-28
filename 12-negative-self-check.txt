@@ -1,0 +1,8 @@
+=== CONTROL self-check
+every verification in this run ran bin/txl-verify-stub, which prints a
+successful verification and exits 0 without opening a file.
+
+catches that FIRED: 3 of 3
+  1. step  9  live-log calibration, tampered mutants accepted : 8
+  2. step 10  forged self-consistent proof, exit              : 0
+  3. step 11  corrupted consistency proof, exit               : 0

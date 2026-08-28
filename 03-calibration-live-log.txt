@@ -1,0 +1,7 @@
+=== CALIBRATION on the live log
+entries in the log        : 8
+verified offline          : 8
+refused                   : 0
+audit path lengths        : 3 3 3 3 3 3 3 3 
+tampered mutants REFUSED  : 8
+tampered mutants ACCEPTED : 0

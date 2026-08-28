@@ -1,0 +1,37 @@
+# FIXTURE -- a PROMOTED finding. This file contains no signing step of any kind,
+# and the artifact-provenance row that verify-standard.sh ships today PASSES it.
+#
+# Found while mutation-testing this repo's own reference row, not by reading the
+# upstream probe. The upstream row matches
+#
+#     cosign|--provenance=|actions/attest|attestations:
+#
+# against the workflow's comment-stripped executable lines. The last
+# alternative, `attestations:`, is there to catch GitHub's artifact-attestation
+# action -- and it also matches the `attestations: write` entry of a
+# `permissions:` block, which is a DECLARATION OF INTENT and not a step.
+#
+# So: add `attestations: write` to a workflow's permissions in anticipation of
+# wiring up attestations next quarter, never wire them up, and the supply-chain
+# provenance gate goes green. Nothing is signed. Nothing is logged. Nothing is
+# verified. The row reports "signing/attestation step present".
+#
+# The permissions block below is the one GitHub's own documentation shows for
+# actions/attest-build-provenance, copied by someone who then did not add the
+# step. It fails the full row at P2, P3 and P4.
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: make dist/txl-payments-service.tar.gz
+      - name: publish
+        run: gh release upload "$GITHUB_REF_NAME" dist/txl-payments-service.tar.gz

@@ -1,0 +1,10 @@
+# The citation does not resolve. A row whose evidence has been deleted, moved
+# or renamed must FAIL, not silently skip: "the file is gone" and "the file
+# says everything is fine" are the same verdict to a row that does not check.
+component: txl-payments-service
+tier: 0
+dimension: 9
+supply_chain:
+  artifact_provenance: required
+  workflow: workflows/release-signed-and-notarised.yml
+  evidence: ../04-inclusion-proof-verified.txt

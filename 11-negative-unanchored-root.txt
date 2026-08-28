@@ -1,0 +1,55 @@
+=== CONTROL unanchored-root
+   forged entry file  : /Users/matiasselser/dev/personal/transparency-log-demo/work/entry-forged.json
+   artifact           : /Users/matiasselser/dev/personal/transparency-log-demo/work/dist/txl-never-logged-9.9.9.tar.gz  sha256:5d57312650f72f1e4cb3df432c12f87c0570f6d69ce9261001cd20752c4a8718
+   signature          : REAL -- made by the demo's signing key over that file
+   invented siblings  : 3  (index 3 of a claimed tree size 8)
+   rootHash written   : 182e25dfa183c71c404092e0c7864464d7bf3379a188dbdb97d4222d7b63c36c   <- computed from the invented path
+   checkpoint copied  : REAL, signed by the live log, committing to
+                        61d68dd9baf42f8368e410d259ffd53b3ff40b74da09adb3cff00bc0ec6bbf0f
+   the two roots      : differ. Nothing in the forged document says so.
+
+--- verification with --anchor=response-roothash (the control), exit 0:
+   [ 1] log-entry-present      PASS  1 entry, uuid 7a0d15edb9f6d943f202038e4ed238a41d618f7778a7ce15f24ff5721e946ef7c5a85e566c1d3d3d
+   [ 2] artifact-binding       PASS  entry names sha256:5d57312650f72f1e... = the artifact on disk
+   [ 3] entry-signature        PASS  verifies over the artifact, signer key sha256:5d9d0adf
+   [ 4] expected-signer        PASS  the entry's signer key is the expected one
+   [ 5] leaf-hash              PASS  SHA-256(0x00||body) = f202038e4ed238a41d618f77... = the uuid suffix
+   [ 6] merkle-path            PASS  3 sibling hash(es), index 3 of tree size 8 -> root 182e25dfa183c71c404092e0...
+   [ 7] root-anchor            PASS  recomputed root == the rootHash field OF THE SAME RESPONSE (self-consistent; anchored to nothing)
+   [ 8] checkpoint-signature   SKIP  --anchor=response-roothash never looks at the signed checkpoint
+   [ 9] log-identity           SKIP  --anchor=response-roothash never looks at the signed checkpoint
+   [10] signed-entry-timestamp SKIP  --anchor=response-roothash never looks at the log's signature
+
+   log index          : 3
+   integrated time    : 1787929422  (2026-08-28T15:03:42Z)
+   tree size at proof : 8
+   audit path length  : 3
+   recomputed root    : 182e25dfa183c71c404092e0c7864464d7bf3379a188dbdb97d4222d7b63c36c
+   root the log SIGNED: 61d68dd9baf42f8368e410d259ffd53b3ff40b74da09adb3cff00bc0ec6bbf0f
+   checkpoint origin  : 902d095fcc08 - 8794709758095841603
+   rootHash in response: 182e25dfa183c71c404092e0c7864464d7bf3379a188dbdb97d4222d7b63c36c
+
+   VERDICT INCLUSION: VERIFIED  (10 checks, 0 failed)
+
+--- the SAME document, with --anchor=signed-checkpoint, exit 1:
+   [ 1] log-entry-present      PASS  1 entry, uuid 7a0d15edb9f6d943f202038e4ed238a41d618f7778a7ce15f24ff5721e946ef7c5a85e566c1d3d3d
+   [ 2] artifact-binding       PASS  entry names sha256:5d57312650f72f1e... = the artifact on disk
+   [ 3] entry-signature        PASS  verifies over the artifact, signer key sha256:5d9d0adf
+   [ 4] expected-signer        PASS  the entry's signer key is the expected one
+   [ 5] leaf-hash              PASS  SHA-256(0x00||body) = f202038e4ed238a41d618f77... = the uuid suffix
+   [ 6] merkle-path            PASS  3 sibling hash(es), index 3 of tree size 8 -> root 182e25dfa183c71c404092e0...
+   [ 7] root-anchor            FAIL  recomputed 182e25dfa183c71c404092e0c7864464d7bf3379a188dbdb97d4222d7b63c36c, the SIGNED checkpoint commits to 61d68dd9baf42f8368e410d259ffd53b3ff40b74da09adb3cff00bc0ec6bbf0f
+   [ 8] checkpoint-signature   PASS  note signed by the log, origin 902d095fcc08 - 8794709758095841603
+   [ 9] log-identity           PASS  key hint 2e056042 = SHA-256(log key)[:4] = logID prefix
+   [10] signed-entry-timestamp FAIL  ECDSA signature does not verify
+
+   log index          : 3
+   integrated time    : 1787929422  (2026-08-28T15:03:42Z)
+   tree size at proof : 8
+   audit path length  : 3
+   recomputed root    : 182e25dfa183c71c404092e0c7864464d7bf3379a188dbdb97d4222d7b63c36c
+   root the log SIGNED: 61d68dd9baf42f8368e410d259ffd53b3ff40b74da09adb3cff00bc0ec6bbf0f
+   checkpoint origin  : 902d095fcc08 - 8794709758095841603
+   rootHash in response: 182e25dfa183c71c404092e0c7864464d7bf3379a188dbdb97d4222d7b63c36c
+
+   VERDICT INCLUSION: REFUSED   (10 checks, 2 failed: root-anchor, signed-entry-timestamp)

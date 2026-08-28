@@ -1,0 +1,9 @@
+# Signs, and switches the transparency log off. The upstream probe row passes
+# this. So does TXL_ROW_MODE=signing-only, which is that row, reproduced.
+component: txl-payments-service
+tier: 0
+dimension: 9
+supply_chain:
+  artifact_provenance: required
+  workflow: workflows/release-sign-no-tlog.yml
+  evidence: ../04-inclusion-proof-verified.txt

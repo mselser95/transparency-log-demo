@@ -1,0 +1,180 @@
+=== PART 1: the artifact-provenance row as verify-standard.sh SHIPS it,
+===         reproduced verbatim and executed against this repo's fixtures
+
+The artifact-provenance row as shipped, run against each fixture.
+PASS below means: verify-standard.sh reports "signing/attestation step present".
+
+  release-comment-only.yml                   FAIL  "no provenance and no live waiver"
+  release-no-tlog-but-verified.yml           PASS  "signing/attestation step present"
+                                               matched: attestations: write
+  release-permissions-only.yml               PASS  "signing/attestation step present"
+                                               matched: attestations: write
+  release-sign-no-tlog.yml                   PASS  "signing/attestation step present"
+                                               matched: cosign sign-blob --yes --key "$COSIGN_KEY" \
+  release-sign-only.yml                      PASS  "signing/attestation step present"
+                                               matched: cosign sign-blob --yes --key "$COSIGN_KEY" \
+  release-signed-logged-verified.yml         PASS  "signing/attestation step present"
+                                               matched: cosign sign-blob --yes --key "$COSIGN_KEY" \
+  release-verify-ignore-tlog.yml             PASS  "signing/attestation step present"
+                                               matched: cosign sign-blob --yes --key "$COSIGN_KEY" \
+  release-verify-online.yml                  PASS  "signing/attestation step present"
+                                               matched: cosign sign-blob --yes --key "$COSIGN_KEY" \
+
+fixtures: 8   passed by the row as shipped: 7
+
+Of those passes, these have no timestamped, witnessed, offline-verifiable
+provenance at all:
+  release-sign-no-tlog.yml         signs with --tlog-upload=false
+  release-sign-only.yml            signs and logs, verifies nothing
+  release-verify-ignore-tlog.yml   verifies with --insecure-ignore-tlog
+  release-verify-online.yml        verifies by asking the log about itself
+  release-no-tlog-but-verified.yml offline-verified, never logged
+  release-permissions-only.yml     NO SIGNING STEP AT ALL -- matched on the
+                                   'attestations: write' line of a GitHub
+                                   permissions block
+
+=== PART 2: the reference row proposed by this demo, over the same fixtures
+
+--- specs/production.implemented.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.implemented.yaml
+    component         : txl-payments-service   tier 0   dimension 9
+    row mode          : full
+    P0 citations      : PASS workflows/release-signed-logged-verified.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+    P1 signing        : PASS 1 executable line(s) match a signing/attestation mechanism: [cosign sign-blob --yes --key "$COSIGN_KEY" --rekor-url "$REK]
+    P2 log upload     : PASS no executable line disables transparency-log upload
+    P3 verify         : PASS 1 verification step(s): ./bin/txl-verify inclusion             --entry dist/entry.json        
+    P4 offline anchor : PASS 1 verification step(s) settle against material on disk: ./bin/txl-verify inclusion             --entry dist/entry.js
+    P5 evidence       : PASS log index, integrated time, 2 recomputed/signed root(s), 10 checks with 0 failed
+    VERDICT PASS
+    exit 0  (expected 0)
+
+--- specs/production.declined.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.declined.yaml
+    component         : txl-devtool-localonly   tier 3   dimension 9
+    row mode          : full
+    waiver            : NA   live waiver, owner platform-security, expires 2099-01-01
+    VERDICT PASS
+    exit 0  (expected 0)
+
+--- specs/production.no-tlog.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.no-tlog.yaml
+    component         : txl-payments-service   tier 0   dimension 9
+    row mode          : full
+    P0 citations      : PASS workflows/release-sign-no-tlog.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+    P1 signing        : PASS 1 executable line(s) match a signing/attestation mechanism: [cosign sign-blob --yes --key "$COSIGN_KEY" --tlog-upload=fal]
+    P2 log upload     : FAIL transparency-log upload is DISABLED: cosign sign-blob --yes --key "$COSIGN_KEY"             --tlog-upload=false       -- the signature proves custody of a key and nothing about when
+    P3 verify         : FAIL no verification step: the pipeline produces provenance and consumes none of it
+    P4 offline anchor : FAIL no verification step names a bundle, a signed checkpoint or an offline mode
+    P5 evidence       : PASS log index, integrated time, 2 recomputed/signed root(s), 10 checks with 0 failed
+    VERDICT FAIL
+    exit 1  (expected 1)
+
+--- specs/production.no-tlog-but-verified.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.no-tlog-but-verified.yaml
+    component         : txl-payments-service   tier 0   dimension 9
+    row mode          : full
+    P0 citations      : PASS workflows/release-no-tlog-but-verified.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+    P1 signing        : PASS 3 executable line(s) match a signing/attestation mechanism: [attestations: write; run: slsa-github-generator generate --artifact dist/txl-paym; cosign sign-blob --yes --key "$COSIGN_KEY" --tlog-upload=fal]
+    P2 log upload     : FAIL transparency-log upload is DISABLED: cosign sign-blob --yes --key "$COSIGN_KEY"             --tlog-upload=false       -- the signature proves custody of a key and nothing about when
+    P3 verify         : PASS 1 verification step(s): slsa-verifier verify-artifact             --provenance-path dist/prove
+    P4 offline anchor : PASS 1 verification step(s) settle against material on disk: slsa-verifier verify-artifact             --provenance-path 
+    P5 evidence       : PASS log index, integrated time, 2 recomputed/signed root(s), 10 checks with 0 failed
+    VERDICT FAIL
+    exit 1  (expected 1)
+
+--- specs/production.sign-only.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.sign-only.yaml
+    component         : txl-payments-service   tier 0   dimension 9
+    row mode          : full
+    P0 citations      : PASS workflows/release-sign-only.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+    P1 signing        : PASS 1 executable line(s) match a signing/attestation mechanism: [cosign sign-blob --yes --key "$COSIGN_KEY" --rekor-url "$REK]
+    P2 log upload     : PASS no executable line disables transparency-log upload
+    P3 verify         : FAIL no verification step: the pipeline produces provenance and consumes none of it
+    P4 offline anchor : FAIL no verification step names a bundle, a signed checkpoint or an offline mode
+    P5 evidence       : PASS log index, integrated time, 2 recomputed/signed root(s), 10 checks with 0 failed
+    VERDICT FAIL
+    exit 1  (expected 1)
+
+--- specs/production.ignore-tlog.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.ignore-tlog.yaml
+    component         : txl-payments-service   tier 0   dimension 9
+    row mode          : full
+    P0 citations      : PASS workflows/release-verify-ignore-tlog.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+    P1 signing        : PASS 2 executable line(s) match a signing/attestation mechanism: [cosign sign-blob --yes --key "$COSIGN_KEY" --rekor-url "$REK; cosign verify-blob --key "$COSIGN_PUB" --insecure-ignore-tlo]
+    P2 log upload     : PASS no executable line disables transparency-log upload
+    P3 verify         : FAIL verification is told to ignore the log: cosign verify-blob --key "$COSIGN_PUB"             --insecure-ignore-tlog=true  
+    P4 offline anchor : PASS 1 verification step(s) settle against material on disk: cosign verify-blob --key "$COSIGN_PUB"             --insecur
+    P5 evidence       : PASS log index, integrated time, 2 recomputed/signed root(s), 10 checks with 0 failed
+    VERDICT FAIL
+    exit 1  (expected 1)
+
+--- specs/production.online-verify.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.online-verify.yaml
+    component         : txl-payments-service   tier 0   dimension 9
+    row mode          : full
+    P0 citations      : PASS workflows/release-verify-online.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+    P1 signing        : PASS 2 executable line(s) match a signing/attestation mechanism: [cosign sign-blob --yes --key "$COSIGN_KEY" --rekor-url "$REK; cosign verify-blob --key "$COSIGN_PUB" --rekor-url "$REKOR_U]
+    P2 log upload     : PASS no executable line disables transparency-log upload
+    P3 verify         : PASS 1 verification step(s): cosign verify-blob --key "$COSIGN_PUB"             --rekor-url "$REKOR
+    P4 offline anchor : FAIL the verification ASKS THE LOG at verify time; the answer is only as good as the log's honesty at that instant
+    P5 evidence       : PASS log index, integrated time, 2 recomputed/signed root(s), 10 checks with 0 failed
+    VERDICT FAIL
+    exit 1  (expected 1)
+
+--- specs/production.comment-only.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.comment-only.yaml
+    component         : txl-payments-service   tier 0   dimension 9
+    row mode          : full
+    P0 citations      : PASS workflows/release-comment-only.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+    P1 signing        : FAIL 0 executable line(s) match a signing/attestation mechanism -- the string may appear only in a comment, which is prose, not a gate
+    P2 log upload     : PASS no executable line disables transparency-log upload
+    P3 verify         : FAIL no verification step: the pipeline produces provenance and consumes none of it
+    P4 offline anchor : FAIL no verification step names a bundle, a signed checkpoint or an offline mode
+    P5 evidence       : PASS log index, integrated time, 2 recomputed/signed root(s), 10 checks with 0 failed
+    VERDICT FAIL
+    exit 1  (expected 1)
+
+--- specs/production.permissions-only.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.permissions-only.yaml
+    component         : txl-payments-service   tier 0   dimension 9
+    row mode          : full
+    P0 citations      : PASS workflows/release-permissions-only.yml -> ok, ../04-inclusion-proof-verified.txt -> ok
+    P1 signing        : PASS 1 executable line(s) match a signing/attestation mechanism: [attestations: write]
+    P2 log upload     : PASS no executable line disables transparency-log upload
+    P3 verify         : FAIL no verification step: the pipeline produces provenance and consumes none of it
+    P4 offline anchor : FAIL no verification step names a bundle, a signed checkpoint or an offline mode
+    P5 evidence       : PASS log index, integrated time, 2 recomputed/signed root(s), 10 checks with 0 failed
+    VERDICT FAIL
+    exit 1  (expected 1)
+
+--- specs/production.decayed.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.decayed.yaml
+    component         : txl-payments-service   tier 0   dimension 9
+    row mode          : full
+    P0 citations      : FAIL workflows/release-signed-and-notarised.yml -> MISSING, ../04-inclusion-proof-verified.txt -> ok
+    VERDICT FAIL
+    exit 1  (expected 1)
+
+--- specs/production.evidence-empty.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.evidence-empty.yaml
+    component         : txl-payments-service   tier 0   dimension 9
+    row mode          : full
+    P0 citations      : PASS workflows/release-signed-logged-verified.yml -> ok, evidence/prose-evidence.txt -> ok
+    P1 signing        : PASS 1 executable line(s) match a signing/attestation mechanism: [cosign sign-blob --yes --key "$COSIGN_KEY" --rekor-url "$REK]
+    P2 log upload     : PASS no executable line disables transparency-log upload
+    P3 verify         : PASS 1 verification step(s): ./bin/txl-verify inclusion             --entry dist/entry.json        
+    P4 offline anchor : PASS 1 verification step(s) settle against material on disk: ./bin/txl-verify inclusion             --entry dist/entry.js
+    P5 evidence       : FAIL the cited evidence does not record a verification: log index NO, integrated time NO, roots 0, verdict line NO
+    VERDICT FAIL
+    exit 1  (expected 1)
+
+--- specs/production.expired-waiver.yaml
+    spec              : /Users/matiasselser/dev/personal/transparency-log-demo/specs/production.expired-waiver.yaml
+    component         : txl-devtool-localonly   tier 3   dimension 9
+    row mode          : full
+    waiver            : FAIL waiver expired 2021-06-30 (owner platform-security); an expired waiver is not an exemption
+    VERDICT FAIL
+    exit 1  (expected 1)
+
+cases: 12   mismatches: 0
+ROW SELF-CHECK OK

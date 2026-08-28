@@ -1,0 +1,30 @@
+# FIXTURE -- signs, logs, and verifies by ASKING THE LOG.
+#
+# The subtlest of the failing fixtures, and the one worth arguing about. This
+# workflow is not careless: it signs, it uploads, it verifies, and the
+# verification really does consult the transparency log. What it never does is
+# recompute anything. The verdict is the log's answer about itself, so a log
+# that is compromised, coerced, or simply serving a different view to this
+# client than to everybody else produces a green release.
+name: release
+on:
+  push:
+    tags: ['v*']
+jobs:
+  sign:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: make dist/txl-payments-service.tar.gz
+      - name: sign
+        run: |
+          cosign sign-blob --yes --key "$COSIGN_KEY" \
+            --rekor-url "$REKOR_URL" \
+            --output-signature dist/artifact.sig \
+            dist/txl-payments-service.tar.gz
+      - name: verify against the log
+        run: |
+          cosign verify-blob --key "$COSIGN_PUB" \
+            --rekor-url "$REKOR_URL" \
+            --signature dist/artifact.sig \
+            dist/txl-payments-service.tar.gz

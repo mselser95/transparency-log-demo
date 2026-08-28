@@ -1,0 +1,12 @@
+# The same decline, one day past its expiry. An exemption nobody renewed is an
+# exemption nobody re-examined, which is why the registries carry dates at all.
+component: txl-devtool-localonly
+tier: 3
+dimension: 9
+supply_chain:
+  artifact_provenance_waiver:
+    owner: platform-security
+    expires: 2021-06-30
+    reason: >-
+      Never distributed. (This waiver expired in 2021 and the tool has been
+      published to an internal registry since 2023.)

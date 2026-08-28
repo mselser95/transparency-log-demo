@@ -1,0 +1,15 @@
+# A ratified decline, with an owner and an expiry. This is a legitimate answer
+# -- a local-only developer tool that is never distributed has nothing to
+# timestamp -- and the row must say PASS/NA rather than FAIL, because a row
+# that cannot be legitimately declined gets disabled instead of answered.
+component: txl-devtool-localonly
+tier: 3
+dimension: 9
+supply_chain:
+  artifact_provenance_waiver:
+    owner: platform-security
+    expires: 2099-01-01
+    reason: >-
+      Never distributed. Built and run inside the repo it lives in; no artifact
+      leaves the machine, so there is no consumer for whom a timestamp would
+      mean anything.

@@ -1,0 +1,8 @@
+# Verifies, with the verifier told to look away.
+component: txl-payments-service
+tier: 0
+dimension: 9
+supply_chain:
+  artifact_provenance: required
+  workflow: workflows/release-verify-ignore-tlog.yml
+  evidence: ../04-inclusion-proof-verified.txt

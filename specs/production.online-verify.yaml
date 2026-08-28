@@ -1,0 +1,9 @@
+# Verifies by asking the log about itself. Correct, automated, and dependent on
+# the log's honesty at that instant.
+component: txl-payments-service
+tier: 0
+dimension: 9
+supply_chain:
+  artifact_provenance: required
+  workflow: workflows/release-verify-online.yml
+  evidence: ../04-inclusion-proof-verified.txt

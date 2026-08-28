@@ -1,0 +1,10 @@
+# A PROMOTED finding: no signing step anywhere, and the row that
+# verify-standard.sh ships today passes it because the workflow's
+# `permissions:` block contains `attestations: write`.
+component: txl-payments-service
+tier: 0
+dimension: 9
+supply_chain:
+  artifact_provenance: required
+  workflow: workflows/release-permissions-only.yml
+  evidence: ../04-inclusion-proof-verified.txt

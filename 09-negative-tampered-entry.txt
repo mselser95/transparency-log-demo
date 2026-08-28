@@ -1,0 +1,30 @@
+=== CONTROL tampered-entry
+   round-trip control : the UNCHANGED record re-serialises to the exact 557 bytes the log stored, so the divergence below is the tamper
+   tampered file      : /Users/matiasselser/dev/personal/transparency-log-demo/work/entry-tampered.json
+   what was changed   : one base64 character of spec.signature.content, position 8: '5' -> '6'
+   body length before : 557 bytes
+   body length after  : 557 bytes
+   left untouched     : the inclusion proof, the signed checkpoint, the Signed Entry Timestamp
+
+   [ 1] log-entry-present      PASS  1 entry, uuid 3397386283205b83bf02dc9393649657cb608ddc9466149b516076469f43e11ca0238ae267cca246
+   [ 2] artifact-binding       PASS  entry names sha256:cc275d10abf94d6e... = the artifact on disk
+   [ 3] entry-signature        FAIL  ECDSA signature does not verify
+   [ 4] expected-signer        PASS  the entry's signer key is the expected one
+   [ 5] leaf-hash              FAIL  SHA-256(0x00||body) = 89dd86d90487db3803610b686e42c3a2eb8892078abb8c7c4978f742495215e2 but the uuid is 3397386283205b83bf02dc9393649657cb608ddc9466149b516076469f43e11ca0238ae267cca246 -- the body was altered after it was logged
+   [ 6] merkle-path            PASS  3 sibling hash(es), index 3 of tree size 8 -> root aa3baf764ac0ca19224ceca0...
+   [ 7] root-anchor            FAIL  recomputed aa3baf764ac0ca19224ceca09eb3bf09c9f08733388964f7429bc61812f9ee56, the SIGNED checkpoint commits to 33302f9694c9ef8a54379a077d5073f3d3e7fab5bdc6014556db0f2b701bb23a
+   [ 8] checkpoint-signature   PASS  note signed by the log, origin 5bbb17829ead - 3717502013175520131
+   [ 9] log-identity           PASS  key hint 91790e54 = SHA-256(log key)[:4] = logID prefix
+   [10] signed-entry-timestamp FAIL  ECDSA signature does not verify
+
+   log index          : 3
+   integrated time    : 1787929299  (2026-08-28T15:01:39Z)
+   tree size at proof : 8
+   audit path length  : 3
+   recomputed root    : aa3baf764ac0ca19224ceca09eb3bf09c9f08733388964f7429bc61812f9ee56
+   root the log SIGNED: 33302f9694c9ef8a54379a077d5073f3d3e7fab5bdc6014556db0f2b701bb23a
+   checkpoint origin  : 5bbb17829ead - 3717502013175520131
+   rootHash in response: 33302f9694c9ef8a54379a077d5073f3d3e7fab5bdc6014556db0f2b701bb23a
+
+   VERDICT INCLUSION: REFUSED   (10 checks, 4 failed: entry-signature, leaf-hash, root-anchor, signed-entry-timestamp)
+exit 1

@@ -1,0 +1,20 @@
+=== the log's identity, before anything was written to it
+
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEebW0zpYrjwIelZbVUEzsIZRJh8+L
+xe9zhm/VJqRKetv65gpcdSNjEG3yt1fLriQ2dc3zpf+1agB19nJZB2K/sA==
+-----END PUBLIC KEY-----
+SHA-256(DER public key) = logID = 23734c9855e2ebc69f0f251330417fba98e9ac0803e0b2d78f6d2bf307b19722
+key hint (first 4 bytes)        = 23734c98
+
+tree size    : 0
+root hash    : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+SHA-256('')  : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855   <- RFC 6962 2.1, MTH({})
+
+signed tree head:
+9f77272444dc - 7027229348690381584
+0
+47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=
+
+— 9f77272444dc I3NMmDBGAiEA4kLhAMxTAoBInwZJnnVM28jJtU6WpvvVSwUqEMaBzO0CIQDWGmAbN0JJqUNWBoFEkzZIeFGoQ50Kp++HFW0aLiiqIQ==
+

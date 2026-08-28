@@ -1,0 +1,43 @@
+# FIXTURE -- the shape the row is written to PASS.
+#
+# Signs the release artifact, uploads the signature to a transparency log, and
+# then verifies the resulting inclusion proof OFFLINE, against a checkpoint the
+# log signed. The verification step consumes files, not a log endpoint.
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  sign-and-log:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: build
+        run: make dist/txl-payments-service.tar.gz
+      - name: sign, and write the signature to the transparency log
+        # No --tlog-upload=false. The upload is the entire point: it is what
+        # turns "somebody with this key signed these bytes" into "somebody with
+        # this key signed these bytes at a time a third party can attest to,
+        # and cannot now un-say it".
+        run: |
+          cosign sign-blob --yes --key "$COSIGN_KEY" \
+            --rekor-url "$REKOR_URL" \
+            --bundle dist/artifact.bundle.json \
+            dist/txl-payments-service.tar.gz
+      - name: fetch the entry and its inclusion proof
+        run: |
+          curl -sSf "$REKOR_URL/api/v1/log/entries?logIndex=$LOG_INDEX" > dist/entry.json
+          curl -sSf "$REKOR_URL/api/v1/log/publicKey" > dist/rekor.pub
+      - name: verify the inclusion proof OFFLINE
+        # Recomputes the Merkle path itself and compares the result against the
+        # root inside the checkpoint the log SIGNED -- not against the rootHash
+        # field of the response the path arrived in.
+        run: |
+          ./bin/txl-verify inclusion \
+            --entry dist/entry.json \
+            --artifact dist/txl-payments-service.tar.gz \
+            --log-pubkey dist/rekor.pub \
+            --anchor signed-checkpoint | tee dist/inclusion-evidence.txt

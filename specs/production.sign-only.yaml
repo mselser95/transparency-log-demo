@@ -1,0 +1,8 @@
+# Produces provenance, consumes none of it.
+component: txl-payments-service
+tier: 0
+dimension: 9
+supply_chain:
+  artifact_provenance: required
+  workflow: workflows/release-sign-only.yml
+  evidence: ../04-inclusion-proof-verified.txt
