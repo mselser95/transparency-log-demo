@@ -1,20 +1,20 @@
 === the log's identity, before anything was written to it
 
 -----BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEebW0zpYrjwIelZbVUEzsIZRJh8+L
-xe9zhm/VJqRKetv65gpcdSNjEG3yt1fLriQ2dc3zpf+1agB19nJZB2K/sA==
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEg5No01xNERyEgZ3vp62Yjhjr5kN7
+xFqRRmYh3VVvVH6jz3HUIoy5QMvW8sqN3hQlHuaVhQMlZEZQv1L2nEZIDg==
 -----END PUBLIC KEY-----
-SHA-256(DER public key) = logID = 23734c9855e2ebc69f0f251330417fba98e9ac0803e0b2d78f6d2bf307b19722
-key hint (first 4 bytes)        = 23734c98
+SHA-256(DER public key) = logID = 063dceb0583602193e9f8bf5cb887d32616412ff1995d3aab6a10624579f6d77
+key hint (first 4 bytes)        = 063dceb0
 
 tree size    : 0
 root hash    : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 SHA-256('')  : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855   <- RFC 6962 2.1, MTH({})
 
 signed tree head:
-9f77272444dc - 7027229348690381584
+26eed8a8030d - 526719010357656621
 0
 47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=
 
-— 9f77272444dc I3NMmDBGAiEA4kLhAMxTAoBInwZJnnVM28jJtU6WpvvVSwUqEMaBzO0CIQDWGmAbN0JJqUNWBoFEkzZIeFGoQ50Kp++HFW0aLiiqIQ==
+— 26eed8a8030d Bj3OsDBFAiEA8msU+1D+B/KSL5NncpR/oXj/KW5raIpScB+i1pCqL/sCIEX0x4UA4QD5ftFLbbEyi6NxUpZLzaUdAURhFbaEWc8i
 

@@ -1,39 +1,39 @@
 === consistency: the log's history between two moments in this run
 
 checkpoint at size 4, captured when the artifact was integrated:
-9f77272444dc - 7027229348690381584
+26eed8a8030d - 526719010357656621
 4
-NIaOWvx3k6mctUwqn4+0rur42L/Lns//V9T2czi7p2Y=
+xS7a4N+vyqe3kHrYsdL/9Co5iWvT8dPNar+Ga6TAx6c=
 
-— 9f77272444dc I3NMmDBEAiBtjZag0ltedfMpig3C8UDbkurEKb+sLSP98grtuEZSJAIgTHOZR55yzMUzXL4MskC5yJdaZJmN1FRQYdr4cJH0CeE=
+— 26eed8a8030d Bj3OsDBGAiEAvN6n8vmlhPON2EQA0Ct5ljM6WPdF5RhQdbTOFMzYazoCIQCBp46V6iohtn9usUIF6jV/ShTmYM6ZdjPiGoGI0CqaYA==
 
 checkpoint at size 8, captured after 4 more releases:
-9f77272444dc - 7027229348690381584
+26eed8a8030d - 526719010357656621
 8
-ofx23sR79txYBTNM+RKD/IEG7l6RIFx5taYr2E0eS5s=
+XaIu2NU4IauJyMaX8cy9bIIrMqol+nAHOoxZnNkDEYk=
 
-— 9f77272444dc I3NMmDBGAiEAgvkzLAKWd4vHSDFzTbj33LUNRcwnBTMPxQ2xyVR9IGMCIQCMoHvTf0XP/lrCpM+cw8d6iW5ZpGEhorng1ktuCAA+aA==
+— 26eed8a8030d Bj3OsDBFAiAbIP8rFAAB8QRd3aDj62MT3MfX2HKqFUHgE8rytOaYLAIhAKpza3AcIgCwXM0IhkZAi4OKMbabzwaidv/YnCtqn4Lz
 
-proof nodes: ["e1ff2ffa2d5dfed12330ccfbfd78bcd17637ec244ced130078ea4f95fe00276a"]
+proof nodes: ["a414bf7594133e5be003ce64522ada88d6ba455c42f57725021558dbfe2a66d1"]
 
-   [ 1] earlier-checkpoint     PASS  signed by the log, size 4, root 34868e5afc7793a99cb54c2a...
-   [ 2] later-checkpoint       PASS  signed by the log, size 8, root a1fc76dec47bf6dc5805334c...
+   [ 1] earlier-checkpoint     PASS  signed by the log, size 4, root c52edae0dfafcaa7b7907ad8...
+   [ 2] later-checkpoint       PASS  signed by the log, size 8, root 5da22ed8d53821ab89c8c697...
    [ 3] append-only            PASS  1 node(s) prove size 4 is a prefix of size 8
 
-   earlier size 4    root (signed): 34868e5afc7793a99cb54c2a9f8fb4aeeaf8d8bfcb9ecfff57d4f67338bba766
-   later   size 8    root (signed): a1fc76dec47bf6dc5805334cf91283fc8106ee5e91205c79b5a62bd84d1e4b9b
+   earlier size 4    root (signed): c52edae0dfafcaa7b7907ad8b1d2fff42a39896bd3f1d3cd6abf866ba4c0c7a7
+   later   size 8    root (signed): 5da22ed8d53821ab89c8c697f1ccbd6c822b32aa25fa70073a8c599cd9031189
    consistency proof nodes       : 1
 
    VERDICT CONSISTENCY: VERIFIED  (3 checks, 0 failed)
 exit 0
 
 --- the same check, one hex digit of one proof node changed:
-   [ 1] earlier-checkpoint     PASS  signed by the log, size 4, root 34868e5afc7793a99cb54c2a...
-   [ 2] later-checkpoint       PASS  signed by the log, size 8, root a1fc76dec47bf6dc5805334c...
-   [ 3] append-only            FAIL  the proof reconstructs e6df59bf3460c0406568842cd942b82c3b12d2b455b3be5b1be050d970eb33a3 as the root at size 8, but the log signed a1fc76dec47bf6dc5805334cf91283fc8106ee5e91205c79b5a62bd84d1e4b9b
+   [ 1] earlier-checkpoint     PASS  signed by the log, size 4, root c52edae0dfafcaa7b7907ad8...
+   [ 2] later-checkpoint       PASS  signed by the log, size 8, root 5da22ed8d53821ab89c8c697...
+   [ 3] append-only            FAIL  the proof reconstructs 21b5f08e03d69ced9ffd7516dc4ae188a8018f05d9b3771c3bdc44b1f70fd5d8 as the root at size 8, but the log signed 5da22ed8d53821ab89c8c697f1ccbd6c822b32aa25fa70073a8c599cd9031189
 
-   earlier size 4    root (signed): 34868e5afc7793a99cb54c2a9f8fb4aeeaf8d8bfcb9ecfff57d4f67338bba766
-   later   size 8    root (signed): a1fc76dec47bf6dc5805334cf91283fc8106ee5e91205c79b5a62bd84d1e4b9b
+   earlier size 4    root (signed): c52edae0dfafcaa7b7907ad8b1d2fff42a39896bd3f1d3cd6abf866ba4c0c7a7
+   later   size 8    root (signed): 5da22ed8d53821ab89c8c697f1ccbd6c822b32aa25fa70073a8c599cd9031189
    consistency proof nodes       : 1
 
    VERDICT CONSISTENCY: REFUSED   (3 checks, 1 failed: append-only)

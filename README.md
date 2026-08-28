@@ -14,8 +14,11 @@ own `txl-net` network; exactly one port is published, `7990`. No cloud, no paid
 service, no Kubernetes. The only network traffic is the image pull and one
 pinned, checksum-verified `cosign` download.
 
-**~85 seconds** from a clean clone on an M-series Mac, measured. The controls
-are full runs of the same length.
+**82 seconds** from a clean clone on an M-series Mac — measured, from `git
+clone` of the pushed commit to exit 0, *including* pulling all four pinned
+images from cold (the log's storage, its tree, its sequencer and Rekor itself)
+and downloading the pinned cosign. The controls are full runs of the same
+length.
 
 ---
 

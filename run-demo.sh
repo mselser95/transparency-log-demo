@@ -792,6 +792,25 @@ if [ "$CONTROL" != "self-check" ]; then
     fail "the offline verification of the artifact's inclusion proof FAILED"
   fi
 fi
+# Cross-check the two independent computations of the log's identity. Step 4
+# derived SHA-256(DER public key) with `openssl pkey`; the verifier derived it
+# again in Go, from the same PEM, and matched it against the checkpoint's key
+# hint. Nothing compared the two, so a difference between the OpenSSL on this
+# machine (LibreSSL on a stock macOS, OpenSSL 3.x under Homebrew and on Linux)
+# would show up as a wrong hash printed confidently in 01-log-identity.txt while
+# every assertion still passed. Two implementations that agree are worth more
+# than either alone, and comparing them costs three lines.
+if [ "$CONTROL" != "self-check" ]; then
+  HINT_FROM_VERIFIER="$(echo "$OUT" | sed -n 's/^ *\[ *[0-9]*\] log-identity *PASS *key hint \([0-9a-f]*\) .*/\1/p')"
+  [ -n "$HINT_FROM_VERIFIER" ] \
+    || fail "could not read the log key hint out of the verifier's output; the cross-check below would have passed by having nothing to compare"
+  [ "${LOG_KEY_SHA:0:8}" = "$HINT_FROM_VERIFIER" ] \
+    || fail "the log key hash disagrees between implementations: openssl says ${LOG_KEY_SHA:0:8}..., the verifier says ${HINT_FROM_VERIFIER}"
+  note ""
+  note "log identity cross-check: openssl and the Go verifier independently derive"
+  note "SHA-256(DER log public key) and agree on ${HINT_FROM_VERIFIER}"
+fi
+
 if [ -z "$CONTROL" ]; then
   cp "$ENTRY" "${HERE}/05-entry-and-inclusion-proof.json"
 fi
